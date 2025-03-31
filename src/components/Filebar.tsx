@@ -1,6 +1,6 @@
 import { Icon, Layout, Rect, RectProps, Txt } from "@motion-canvas/2d";
 import { all } from "@motion-canvas/core";
-import { paddingNormal } from "./Theme";
+import { colorBlack, colorMap, colorWhite, entryTextSize, fontFamilyDefault, fontWeightBold, gapNormal, iconMap, iconSize, marginLeft, paddingNormal, specialFiles } from "../theme/Theme";
 
 export class FilebarEntry {
     public name: string;
@@ -12,54 +12,18 @@ export interface FilebarProps extends RectProps {
 }
 
 export class Filebar extends Rect {
-    private readonly entries: FilebarEntry[]; 
+    private readonly entries: FilebarEntry[];
 
     private entryToComponents: Map<FilebarEntry, [Txt, Icon]> = new Map();
     private childrenLayouts: Map<FilebarEntry, Layout> = new Map();
-
-    private readonly iconSize = 24;
-    private readonly entryTextSize = 14;
-
-    private readonly colorMap: { [key: string]: string } = {
-        folder: '#98BC34',
-        default: '#B0BEC5',
-        git: '#F06292',
-        cpp: '#4FC3F7',
-        hpp: '#4FC3F7',
-        cmake: '#64B5F6',
-        config: '#26A69A',
-        text: '#E0E0E0',
-        code: '#FFB74D',
-    };
-
-    private readonly iconMap: { [key: string]: string } = {
-        folder: 'mdi-folder',
-        default: 'mdi-file-outline',
-        ts: 'mdi-language-typescript',
-        js: 'mdi-nodejs',
-        json: 'mdi-code-json',
-        md: 'mdi-markdown',
-        cpp: 'mdi-language-cpp',
-        hpp: 'mdi-language-cpp',
-        cmake: 'mdi-cube',
-        git: 'mdi-git',
-    };
-
-    private readonly specialFiles: { [key: string]: { icon: string; color: string } } = {
-        'gitignore': { icon: 'mdi-git', color: this.colorMap.git },
-        'clang-format': { icon: 'mdi-cog', color: this.colorMap.config },
-        'clang-tidy': { icon: 'mdi-tune-variant', color: this.colorMap.config },
-        'cmakelists.txt': { icon: 'mdi-cube', color: this.colorMap.cmake },
-        'readme.md': { icon: 'mdi-markdown', color: this.colorMap.text },
-    };
 
     public constructor(props?: FilebarProps) {
         super({
             direction: "column",
             layout: true,
-            gap: 5,
+            gap: gapNormal,
             padding: paddingNormal,
-            fill: "rgb(10, 10, 10)",
+            fill: colorBlack,
             ...props,
         });
 
@@ -141,9 +105,9 @@ export class Filebar extends Rect {
             const isGitFolder = entry.name === '.git';
             return (
                 <Icon
-                    icon={isGitFolder ? this.iconMap.git : this.iconMap.folder}
-                    size={this.iconSize}
-                    color={isGitFolder ? this.colorMap.git : this.colorMap.folder}
+                    icon={isGitFolder ? iconMap.git : iconMap.folder}
+                    size={iconSize}
+                    color={isGitFolder ? colorMap.git : colorMap.folder}
                 />
             );
         }
@@ -151,32 +115,32 @@ export class Filebar extends Rect {
         const fileName = entry.name.toLowerCase();
         const fileExt = fileName.split('.').pop() || '';
 
-        if (fileName in this.specialFiles) {
-            const { icon, color } = this.specialFiles[fileName];
-            return <Icon icon={icon} size={this.iconSize} color={color} />;
+        if (fileName in specialFiles) {
+            const { icon, color } = specialFiles[fileName];
+            return <Icon icon={icon} size={iconSize} color={color} />;
         }
 
         if (fileName.startsWith('.')) {
             const cleanName = fileName.slice(1);
-            if (cleanName in this.specialFiles) {
-                const { icon, color } = this.specialFiles[cleanName];
-                return <Icon icon={icon} size={this.iconSize} color={color} />;
+            if (cleanName in specialFiles) {
+                const { icon, color } = specialFiles[cleanName];
+                return <Icon icon={icon} size={iconSize} color={color} />;
             }
         }
 
-        let color = this.colorMap.default;
+        let color = colorMap.default;
         if (['cpp', 'h', 'hpp'].includes(fileExt)) {
-            color = this.colorMap.cpp;
+            color = colorMap.cpp;
         } else if (['md', 'txt'].includes(fileExt)) {
-            color = this.colorMap.text;
+            color = colorMap.text;
         } else if (['json', 'yml', 'yaml'].includes(fileExt)) {
-            color = this.colorMap.code;
+            color = colorMap.code;
         }
 
         return (
             <Icon
-                icon={this.iconMap[fileExt] || this.iconMap.default}
-                size={this.iconSize}
+                icon={iconMap[fileExt] || iconMap.default}
+                size={iconSize}
                 color={color}
             />
         );
@@ -184,11 +148,11 @@ export class Filebar extends Rect {
 
     private renderEntry(entry: FilebarEntry, depth: number = 0) {
         return (
-            <Layout direction="column" marginLeft={depth * 10}>
+            <Layout direction="column" marginLeft={depth * marginLeft}>
                 <Layout
                     direction="row"
                     alignItems="center"
-                    gap={5}
+                    gap={gapNormal}
                     ref={layout => {
                         if (layout) {
                             const txt = layout.children().find(c => c instanceof Txt) as Txt;
@@ -199,10 +163,10 @@ export class Filebar extends Rect {
                 >
                     {this.getFileIcon(entry)}
                     <Txt
-                        fontFamily={"Jetbrains Mono"}
-                        fontWeight={800}
-                        fontSize={this.entryTextSize}
-                        fill={"rgb(220, 220, 220)"}
+                        fontFamily={fontFamilyDefault}
+                        fontWeight={fontWeightBold}
+                        fontSize={entryTextSize}
+                        fill={colorWhite}
                         opacity={1}
                         text={entry.name}
                     />

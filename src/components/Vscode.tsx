@@ -1,5 +1,5 @@
 import { Code, Layout, Rect, RectProps } from "@motion-canvas/2d";
-import { paddingNormal } from "./Theme";
+import { paddingNormal } from "../theme/Theme";
 import { FilebarProps, Filebar } from "./Filebar";
 import { Reference } from "@motion-canvas/core";
 import { MyCode } from "./MyCode";
