@@ -80,7 +80,7 @@ export class Filebar extends Rect {
     }
 
     private getEntryIconAndColor(entry: FilebarEntry): { icon: string, color: string } {
-        if (entry.childrens?.length > 0) {
+        if (entry.childrens) {
             return entry.name === '.git'
                 ? fileTypeMap['.git']
                 : fileTypeMap['folder'];
@@ -107,19 +107,17 @@ export class Filebar extends Rect {
         return <Icon icon={icon} size={iconSize} color={color} />;
     }
 
-    public *highlightEntryByPath(path: string, duration: number = 0.5) {
+    public *highlightEntry(path: string, duration: number = 0.5) {
         const targetComponents = this.entryToComponents.get(path);
-        if (targetComponents) {
-            const allComponents = Array.from(this.entryToComponents.values());
-            yield* all(
-                ...allComponents.map(([txt, icon]) =>
-                    all(txt.opacity(0.5, duration), icon.opacity(0.5, duration))
-                ),
-                ...[targetComponents].map(([txt, icon]) =>
-                    all(txt.opacity(1, duration), icon.opacity(1, duration))
-                )
-            );
-        }
+        const allComponents = Array.from(this.entryToComponents.values());
+        yield* all(
+            ...allComponents.map(([txt, icon]) =>
+                all(txt.opacity(0.5, duration), icon.opacity(0.5, duration))
+            ),
+            ...[targetComponents].map(([txt, icon]) =>
+                all(txt.opacity(1, duration), icon.opacity(1, duration))
+            )
+        );
     }
 
     public *resetHighlight(duration: number = 0.5) {
@@ -131,22 +129,20 @@ export class Filebar extends Rect {
         );
     }
 
-    public *setFolderOpenByPath(path: string, open: boolean, duration: number = 0.5) {
+    public *openFolder(path: string, duration: number = 0.5) {
         const layout = this.childrenLayouts.get(path);
-        if (layout) {
-            if (open) {
-                if (layout.height() === 0) {
-                    layout.height(null);
-                    const targetHeight = layout.size().y;
-                    layout.height(0);
-                    yield* layout.height(targetHeight, duration);
-                    layout.height(null);
-                }
-            } else {
-                if (layout.height() !== 0) {
-                    yield* layout.height(0, duration);
-                }
-            }
-        }
+
+        layout.height(null);
+        const targetHeight = layout.size().y;
+        layout.height(0);
+
+        yield* layout.height(targetHeight, duration);
+        layout.height(null);
+    }
+
+    public *closeFolder(path: string, duration: number = 0.5) {
+        const layout = this.childrenLayouts.get(path);
+
+        yield* layout.height(0, duration);
     }
 }
