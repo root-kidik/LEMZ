@@ -33,20 +33,18 @@ export default makeScene2D(function* (view) {
   );
 
   yield* beginSlide('1');
-  yield* filebar().setFolderOpenByPath('src', false, 0.5);
+  yield* filebar().setFolderOpenByPath('src', false);
 
   yield* beginSlide('3');
-  yield* filebar().setFolderOpenByPath('src', true, 0.5);
+  yield* filebar().setFolderOpenByPath('src', true);
 
   yield* beginSlide('4');
-  yield* filebar().highlightEntryByPath("src/math/CMakeLists.txt", 1);
+  yield* filebar().highlightEntryByPath("src/math/CMakeLists.txt");
 
   yield* beginSlide('5');
-  yield* filebar().highlightEntryByPath("CMakeLists.txt", 1);
+  yield* filebar().highlightEntryByPath("CMakeLists.txt");
 
   yield* beginSlide('6');
-  yield* filebar().resetHighlight(1);
+  yield* filebar().resetHighlight();
 
 });
-
-// 

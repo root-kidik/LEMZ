@@ -14,35 +14,19 @@ export const fontFamilyDefault = "Jetbrains Mono";
 export const iconSize = 24;
 export const entryTextSize = 14;
 
-export const colorMap: { [key: string]: string } = {
-    folder: '#98BC34',
-    default: '#B0BEC5',
-    git: '#F06292',
-    cpp: '#4FC3F7',
-    hpp: '#4FC3F7',
-    cmake: '#64B5F6',
-    config: '#26A69A',
-    text: '#E0E0E0',
-    code: '#FFB74D',
-};
-
-export const iconMap: { [key: string]: string } = {
-    folder: 'mdi-folder',
-    default: 'mdi-file-outline',
-    ts: 'mdi-language-typescript',
-    js: 'mdi-nodejs',
-    json: 'mdi-code-json',
-    md: 'mdi-markdown',
-    cpp: 'mdi-language-cpp',
-    hpp: 'mdi-language-cpp',
-    cmake: 'mdi-cube',
-    git: 'mdi-git',
+export const fileTypeMap: { [key: string]: { icon: string; color: string } } = {
+    '.git': { icon: 'mdi-git', color: '#F06292' },
+    'folder': { icon: 'mdi-folder', color: '#98BC34' },
+    'default': { icon: 'mdi-file-outline', color: '#B0BEC5' },
+    'cpp': { icon: 'mdi-language-cpp', color: '#4FC3F7' },
+    'hpp': { icon: 'mdi-language-cpp', color: '#4FC3F7' },
+    'md': { icon: 'mdi-markdown', color: '#E0E0E0' },
+    'json': { icon: 'mdi-code-json', color: '#FFB74D' },
 };
 
 export const specialFiles: { [key: string]: { icon: string; color: string } } = {
-    'gitignore': { icon: 'mdi-git', color: colorMap.git },
-    'clang-format': { icon: 'mdi-cog', color: colorMap.config },
-    'clang-tidy': { icon: 'mdi-tune-variant', color: colorMap.config },
-    'cmakelists.txt': { icon: 'mdi-cube', color: colorMap.cmake },
-    'readme.md': { icon: 'mdi-markdown', color: colorMap.text },
+    'gitignore': { icon: 'mdi-git', color: '#F06292' },
+    'clang-format': { icon: 'mdi-cog', color: '#26A69A' },
+    'clang-tidy': { icon: 'mdi-tune-variant', color: '#26A69A' },
+    'cmakelists.txt': { icon: 'mdi-cube', color: '#64B5F6' },
 };
