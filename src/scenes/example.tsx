@@ -1,7 +1,7 @@
 import { Code, makeScene2D, Rect } from '@motion-canvas/2d';
 import { FilebarEntry } from '../components/FilebarEntry';
 import { Vscode } from '../components/Vscode';
-import { beginSlide, createRef, createSignal, waitFor } from '@motion-canvas/core';
+import { createRef, createSignal, waitFor } from '@motion-canvas/core';
 
 export default makeScene2D(function* (view) {
     const entries = createSignal([

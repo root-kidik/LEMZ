@@ -24,24 +24,37 @@ export class FilebarEntry extends Layout {
         super({
             direction: "column",
             layout: true,
-            marginLeft: props.depth * marginLeft, 
+            marginLeft: props.depth * marginLeft,
             ...props,
         });
 
         this.add(
             <>
-                {this.name().length > 0 && <Layout layout gap={gapNormal} alignItems={"center"}>
-                    {this.getFileIcon()}
-                    <Txt
-                        fontFamily={fontFamilyDefault}
-                        fontWeight={fontWeightBold}
-                        fontSize={entryTextSize}
-                        fill={colorWhite}
-                        opacity={1}
-                        text={this.name}
-                    />
-                </Layout>}
-                {this.childrens().length > 0 && this.childrens().map((entry) => <FilebarEntry name={entry.name} childrens={entry.childrens} depth={props.depth + 1} />)}
+                {
+                    this.name().length > 0 && 
+                    <Layout layout gap={gapNormal} alignItems={"center"}>
+                        {this.getFileIcon()}
+
+                        <Txt
+                            fontFamily={fontFamilyDefault}
+                            fontWeight={fontWeightBold}
+                            fontSize={entryTextSize}
+                            fill={colorWhite}
+                            opacity={1}
+                            text={this.name}
+                        />
+                    </Layout>
+                }
+                {
+                    this.childrens().length > 0 &&
+                    this.childrens().map((entry) =>
+                        <FilebarEntry 
+                            name={entry.name} 
+                            childrens={entry.childrens} 
+                            depth={this.name().length > 0 ? props.depth + 1 : props.depth} 
+                        />
+                    )
+                }
             </>
         );
     }
