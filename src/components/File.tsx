@@ -2,21 +2,16 @@ import { Icon, initial, Layout, LayoutProps, signal, Txt } from "@motion-canvas/
 import { colorWhite, entryTextSize, fileTypeMap, fontFamilyDefault, fontWeightBold, gapNormal, iconSize, marginLeft, specialFiles } from "../theme/Theme";
 import { SignalValue, SimpleSignal } from "@motion-canvas/core";
 
-export interface FilebarEntryProps extends LayoutProps {
+export interface FileProps extends LayoutProps {
     name: SignalValue<string>;
-    childrens?: SignalValue<FilebarEntry[]>;
     depth?: number;
 }
 
-export class FilebarEntry extends Layout {
+export class File extends Layout {
     @signal()
     public declare readonly name: SimpleSignal<string, this>;
 
-    @initial([])
-    @signal()
-    public declare readonly childrens: SimpleSignal<FilebarEntry[], this>;
-
-    public constructor(props: FilebarEntryProps) {
+    public constructor(props: FileProps) {
         if (!props.depth) {
             props.depth = 0;
         }
@@ -28,39 +23,26 @@ export class FilebarEntry extends Layout {
             ...props,
         });
 
-        this.add(
-            <>
-                {
-                    this.name().length > 0 && 
-                    <Layout layout gap={gapNormal} alignItems={"center"}>
-                        {this.getFileIcon()}
+        if (this.name().length <= 0) return;
 
-                        <Txt
-                            fontFamily={fontFamilyDefault}
-                            fontWeight={fontWeightBold}
-                            fontSize={entryTextSize}
-                            fill={colorWhite}
-                            opacity={1}
-                            text={this.name}
-                        />
-                    </Layout>
-                }
-                {
-                    this.childrens().length > 0 &&
-                    this.childrens().map((entry) =>
-                        <FilebarEntry 
-                            name={entry.name} 
-                            childrens={entry.childrens} 
-                            depth={this.name().length > 0 ? props.depth + 1 : props.depth} 
-                        />
-                    )
-                }
-            </>
+        this.insert(
+            <Layout layout gap={gapNormal} alignItems={"center"}>
+                {this.getFileIcon()}
+
+                <Txt
+                    fontFamily={fontFamilyDefault}
+                    fontWeight={fontWeightBold}
+                    fontSize={entryTextSize}
+                    fill={colorWhite}
+                    opacity={1}
+                    text={this.name()}
+                />
+            </Layout>
         );
     }
 
     private getEntryIconAndColor(): { icon: string, color: string } {
-        if (this.childrens().length > 0) {
+        if (this.children().length > 0) {
             return this.name() === '.git'
                 ? fileTypeMap['.git']
                 : fileTypeMap['folder'];

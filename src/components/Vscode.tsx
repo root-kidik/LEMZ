@@ -1,10 +1,10 @@
 import { Code, Rect, RectProps } from "@motion-canvas/2d";
 import { colorBlack, colorSemiBlack, fontFamilyDefault, fontWeightBold, gapNormal, paddingNormal } from "../theme/Theme";
-import { FilebarEntry } from "./FilebarEntry";
+import { File } from "./File";
 import { Reference, SignalValue } from "@motion-canvas/core";
 
 export interface VscodeProps extends RectProps {
-    entries: SignalValue<FilebarEntry[]>;
+    root: SignalValue<File>;
     filebar_ref: Reference<Rect>;
     code_ref: Reference<Code>;
 }
@@ -29,7 +29,7 @@ export class Vscode extends Rect {
                     padding={paddingNormal}
                     fill={colorBlack}
                     ref={props.filebar_ref}
-                    children={props.entries}
+                    children={props.root}
                 />
 
                 <Rect
