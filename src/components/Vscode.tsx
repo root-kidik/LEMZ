@@ -1,14 +1,12 @@
-import { Code, Layout, Rect, RectProps } from "@motion-canvas/2d";
-import { paddingNormal } from "../theme/Theme";
-import { FilebarProps, Filebar } from "./Filebar";
-import { Reference } from "@motion-canvas/core";
-import { MyCode } from "./MyCode";
+import { Code, Rect, RectProps } from "@motion-canvas/2d";
+import { colorBlack, colorSemiBlack, fontFamilyDefault, fontWeightBold, gapNormal, paddingNormal } from "../theme/Theme";
+import { FilebarEntry } from "./FilebarEntry";
+import { Reference, SignalValue } from "@motion-canvas/core";
 
 export interface VscodeProps extends RectProps {
-    filebar_props: FilebarProps;
-    filebar_ref: Reference<Filebar>;
-
-    code_ref: Reference<MyCode>;
+    entries: SignalValue<FilebarEntry[]>;
+    filebar_ref: Reference<Rect>;
+    code_ref: Reference<Code>;
 }
 
 export class Vscode extends Rect {
@@ -24,10 +22,29 @@ export class Vscode extends Rect {
 
         this.add(
             <>
-                <Filebar ref={props.filebar_ref} entries={props.filebar_props.entries} />
+                <Rect
+                    layout
+                    direction={"column"}
+                    gap={gapNormal}
+                    padding={paddingNormal}
+                    fill={colorBlack}
+                    ref={props.filebar_ref}
+                    children={props.entries}
+                />
 
-                <Rect layout width={"100%"} height={"100%"} fill={"rgb(20, 20, 20)"} padding={paddingNormal}>
-                    <Code ref={props.code_ref} fontFamily={"Jetbrains Mono"} fontWeight={800} fontSize={28} />
+                <Rect
+                    layout
+                    width={"100%"}
+                    height={"100%"}
+                    fill={colorSemiBlack}
+                    padding={paddingNormal}
+                >
+                    <Code
+                        ref={props.code_ref}
+                        fontFamily={fontFamilyDefault}
+                        fontWeight={fontWeightBold}
+                        fontSize={28}
+                    />
                 </Rect>
             </>
         );

@@ -1,51 +1,41 @@
-import { Code, makeScene2D } from '@motion-canvas/2d';
-import { FilebarEntry, Filebar } from '../components/Filebar';
+import { Code, makeScene2D, Rect } from '@motion-canvas/2d';
+import { FilebarEntry } from '../components/FilebarEntry';
 import { Vscode } from '../components/Vscode';
-import { beginSlide, createRef } from '@motion-canvas/core';
-
-const entries: FilebarEntry[] = [
-  {
-    name: "include", childrens: [
-      {
-        name: "math", childrens: [
-          { name: "Hello.hpp" }
-        ]
-      },
-    ]
-  },
-  {
-    name: "src", childrens: [
-      {
-        name: "math", childrens: [
-          { name: "Hello.cpp" },
-          { name: "CMakeLists.txt" },
-        ]
-      },
-    ]
-  },
-  { name: "CMakeLists.txt" },
-];
+import { beginSlide, createRef, createSignal, waitFor } from '@motion-canvas/core';
 
 export default makeScene2D(function* (view) {
-  const filebar = createRef<Filebar>();
-  const code = createRef<Code>();
+    const entries = createSignal([
+        new FilebarEntry(
+            {
+                name: "src",
+                childrens: [
+                    new FilebarEntry(
+                        {
+                            name: "math",
+                            childrens: [
+                                new FilebarEntry(
+                                    {
+                                        name: "Math.hpp"
+                                    }
+                                )
+                            ]
+                        }
+                    )
+                ]
+            }
+        )
+    ])
 
-  view.add(
-    <Vscode code_ref={code} filebar_ref={filebar} filebar_props={{ entries: entries }} />
-  );
+    const filebar = createRef<Rect>();
+    const code = createRef<Code>();
 
-  yield* beginSlide('1');
-  yield* filebar().closeFolder('src');
+    view.add(
+        <Vscode code_ref={code} filebar_ref={filebar} entries={entries} />
+    );
 
-  yield* beginSlide('2');
-  yield* filebar().openFolder('src');
+    yield* waitFor(1);
 
-  yield* beginSlide('4');
-  yield* filebar().highlightEntry("src/math/CMakeLists.txt");
+    entries([...entries(), new FilebarEntry({name: "include"})]);
 
-  yield* beginSlide('5');
-  yield* filebar().highlightEntry("CMakeLists.txt");
-
-  yield* beginSlide('6');
-  yield* filebar().resetHighlight();
+    yield* waitFor(1);
 });

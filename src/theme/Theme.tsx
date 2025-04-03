@@ -1,4 +1,6 @@
 export const colorBlack = "rgb(10, 10, 10)";
+export const colorSemiBlack = "rgb(20, 20, 20)";
+
 export const colorWhite = "rgb(220, 220, 220)";
 
 export const paddingNormal = 20;
