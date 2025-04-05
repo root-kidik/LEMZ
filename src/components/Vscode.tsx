@@ -16,7 +16,7 @@ export class Vscode extends Rect {
             padding: paddingNormal,
             height: "100%",
             width: "100%",
-            fill: "rgb(10, 10, 10)",
+            fill: colorBlack,
             ...props,
         });
 

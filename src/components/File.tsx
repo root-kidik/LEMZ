@@ -1,4 +1,4 @@
-import { Icon, initial, Layout, LayoutProps, signal, Txt } from "@motion-canvas/2d";
+import { Icon, Layout, LayoutProps, signal, Txt } from "@motion-canvas/2d";
 import { colorWhite, entryTextSize, fileTypeMap, fontFamilyDefault, fontWeightBold, gapNormal, iconSize, marginLeft, specialFiles } from "../theme/Theme";
 import { SignalValue, SimpleSignal } from "@motion-canvas/core";
 
@@ -25,9 +25,11 @@ export class File extends Layout {
 
         if (this.name().length <= 0) return;
 
+        const {icon, color} = this.getEntryIconAndColor();
+
         this.insert(
             <Layout layout gap={gapNormal} alignItems={"center"}>
-                {this.getFileIcon()}
+                <Icon icon={icon} size={iconSize} color={color} />
 
                 <Txt
                     fontFamily={fontFamilyDefault}
@@ -35,7 +37,7 @@ export class File extends Layout {
                     fontSize={entryTextSize}
                     fill={colorWhite}
                     opacity={1}
-                    text={this.name()}
+                    text={this.name}
                 />
             </Layout>
         );
@@ -62,10 +64,5 @@ export class File extends Layout {
 
         const fileExt = fileName.split('.').pop() || '';
         return fileTypeMap[fileExt] || fileTypeMap['default'];
-    }
-
-    private getFileIcon() {
-        const { icon, color } = this.getEntryIconAndColor();
-        return <Icon icon={icon} size={iconSize} color={color} />;
     }
 }
