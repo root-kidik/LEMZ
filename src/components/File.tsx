@@ -4,7 +4,6 @@ import { SignalValue, SimpleSignal } from "@motion-canvas/core";
 
 export interface FileProps extends LayoutProps {
     name: SignalValue<string>;
-    depth?: number;
 }
 
 export class File extends Layout {
@@ -12,14 +11,10 @@ export class File extends Layout {
     public declare readonly name: SimpleSignal<string, this>;
 
     public constructor(props: FileProps) {
-        if (!props.depth) {
-            props.depth = 0;
-        }
-
         super({
             direction: "column",
             layout: true,
-            marginLeft: props.depth * marginLeft,
+            marginLeft: () => this.getDepth() == 0 ? 0 : (this.getDepth() - 1) * marginLeft,
             ...props,
         });
 
@@ -64,5 +59,15 @@ export class File extends Layout {
 
         const fileExt = fileName.split('.').pop() || '';
         return fileTypeMap[fileExt] || fileTypeMap['default'];
+    }
+
+    private getDepth(): number {
+        let depth = 0;
+        let current = this.parent();
+        while (current instanceof File) {
+            depth++;
+            current = current.parent();
+        }
+        return depth;
     }
 }

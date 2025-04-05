@@ -1,7 +1,7 @@
 import { Code, makeScene2D, Rect } from '@motion-canvas/2d';
 import { File } from '../components/File';
 import { Vscode } from '../components/Vscode';
-import { createRef, createSignal, SimpleSignal, waitFor } from '@motion-canvas/core';
+import { createRef, createSignal, waitFor } from '@motion-canvas/core';
 
 export default makeScene2D(function* (view) {
     const root_name = createSignal("");
@@ -11,7 +11,7 @@ export default makeScene2D(function* (view) {
     const root = createSignal(
         <File name={root_name}>
             <File name={src_name}>
-                <File name={math_name} depth={1} />
+                <File name={math_name} />
             </File>
         </File> as File
     );
