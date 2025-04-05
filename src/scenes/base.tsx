@@ -12,6 +12,12 @@ project(Math)
 
 add_library(\${PROJECT_NAME} Math.cpp)`;
 
+const mathCppCode = CODE`\
+int sum(int a, int b)
+{
+    return a + b;
+}`;
+
 export default makeScene2D(function* (view) {
     const math_cpp = createFile("Math.cpp");
     const root_cmake = createFile("CMakeLists.txt");
@@ -66,4 +72,10 @@ export default makeScene2D(function* (view) {
     );
 
     yield* waitFor(1);
+
+    yield* all(
+        math_cpp().opacity(1, animationTime),
+        root_cmake().opacity(opacitySemi, animationTime),
+        code().code(mathCppCode, animationTime),
+    );
 });

@@ -1,6 +1,7 @@
 import {makeProject} from '@motion-canvas/core';
 
 import base from './scenes/base?scene';
+import usage from './scenes/usage?scene';
 
 import { Code, LezerHighlighter } from "@motion-canvas/2d";
 import { parser } from "@lezer/cpp";
@@ -14,5 +15,5 @@ Code.defaultHighlighter = new LezerHighlighter(
 );
 
 export default makeProject({
-  scenes: [base],
+  scenes: [base, usage],
 });
