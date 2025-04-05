@@ -1,6 +1,6 @@
 import { Icon, Layout, LayoutProps, signal, Txt } from "@motion-canvas/2d";
-import { all, DEFAULT, SignalValue, SimpleSignal } from "@motion-canvas/core";
-import { colorWhite, entryTextSize, fileTypeMap, fontFamilyDefault, fontWeightBold, gapNormal, iconSize, marginLeft, specialFiles } from "../theme/Theme";
+import { DEFAULT, SignalValue, SimpleSignal } from "@motion-canvas/core";
+import { animationTime, colorWhite, entryTextSize, fileTypeMap, fontFamilyDefault, fontWeightBold, gapNormal, iconSize, marginLeft, specialFiles } from "../theme/Theme";
 
 export interface FileProps extends LayoutProps {
     name: SignalValue<string>;
@@ -36,11 +36,15 @@ export class File extends Layout {
         );
     }
 
-    public *openFolder(duration: number = 0.5) {
+    public addFile(file: SimpleSignal<File>) {
+        this.children([...this.children(), file()]);
+    }
+
+    public *openFolder(duration: number = animationTime) {
         yield* this.height(DEFAULT, duration);
     }
 
-    public *closeFolder(duration: number = 0.5) {
+    public *closeFolder(duration: number = animationTime) {
         const layout = this.children()[0] as Layout;
         yield* this.height(layout.height(), duration);
     }

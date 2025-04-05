@@ -32,3 +32,5 @@ export const specialFiles: { [key: string]: { icon: string; color: string } } = 
     'clang-tidy': { icon: 'mdi-tune-variant', color: '#26A69A' },
     'cmakelists.txt': { icon: 'mdi-cube', color: '#64B5F6' },
 };
+
+export const animationTime = 0.5;
