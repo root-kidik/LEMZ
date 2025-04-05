@@ -1,6 +1,6 @@
 import { Icon, Layout, LayoutProps, signal, Txt } from "@motion-canvas/2d";
+import { all, DEFAULT, SignalValue, SimpleSignal } from "@motion-canvas/core";
 import { colorWhite, entryTextSize, fileTypeMap, fontFamilyDefault, fontWeightBold, gapNormal, iconSize, marginLeft, specialFiles } from "../theme/Theme";
-import { SignalValue, SimpleSignal } from "@motion-canvas/core";
 
 export interface FileProps extends LayoutProps {
     name: SignalValue<string>;
@@ -14,18 +14,16 @@ export class File extends Layout {
         super({
             direction: "column",
             layout: true,
+            clip: true,
             marginLeft: () => this.getDepth() == 0 ? 0 : (this.getDepth() - 1) * marginLeft,
             ...props,
         });
 
         if (this.name().length <= 0) return;
 
-        const {icon, color} = this.getEntryIconAndColor();
-
         this.insert(
             <Layout layout gap={gapNormal} alignItems={"center"}>
-                <Icon icon={icon} size={iconSize} color={color} />
-
+                <Icon icon={() => this.getEntryIconAndColor().icon} size={iconSize} color={() => this.getEntryIconAndColor().color} />
                 <Txt
                     fontFamily={fontFamilyDefault}
                     fontWeight={fontWeightBold}
@@ -38,25 +36,31 @@ export class File extends Layout {
         );
     }
 
+    public *openFolder(duration: number = 0.5) {
+        yield* this.height(DEFAULT, duration);
+    }
+
+    public *closeFolder(duration: number = 0.5) {
+        const layout = this.children()[0] as Layout;
+        yield* this.height(layout.height(), duration);
+    }
+
     private getEntryIconAndColor(): { icon: string, color: string } {
-        if (this.children().length > 0) {
+        if (this.isFolder()) {
             return this.name() === '.git'
                 ? fileTypeMap['.git']
                 : fileTypeMap['folder'];
         }
-
         const fileName = this.name().toLowerCase();
         if (fileName in specialFiles) {
             return specialFiles[fileName];
         }
-
         if (fileName.startsWith('.')) {
             const cleanName = fileName.slice(1);
             if (cleanName in specialFiles) {
                 return specialFiles[cleanName];
             }
         }
-
         const fileExt = fileName.split('.').pop() || '';
         return fileTypeMap[fileExt] || fileTypeMap['default'];
     }
@@ -69,5 +73,9 @@ export class File extends Layout {
             current = current.parent();
         }
         return depth;
+    }
+
+    private isFolder(): boolean {
+        return this.children().length > 1;
     }
 }

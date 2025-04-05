@@ -4,17 +4,25 @@ import { Vscode } from '../components/Vscode';
 import { createRef, createSignal, waitFor } from '@motion-canvas/core';
 
 export default makeScene2D(function* (view) {
-    const root_name = createSignal("");
-    const src_name = createSignal("src");
-    const math_name = createSignal("Math.hpp");
+    const math_cpp = createSignal(
+        <File name={"Math.cpp"} /> as File
+    );
+
+    const src_cmake = createSignal(
+        <File name={"CMakeLists.txt"} /> as File
+    );
+
+    const src = createSignal(
+        <File name={"src"} /> as File
+    );
+
+    src().children([...src().children(), math_cpp(), src_cmake()]);
 
     const root = createSignal(
-        <File name={root_name}>
-            <File name={src_name}>
-                <File name={math_name} />
-            </File>
-        </File> as File
+        <File name={""} /> as File
     );
+
+    root().children([...root().children(), src()]);
 
     const filebar = createRef<Rect>();
     const code = createRef<Code>();
@@ -28,4 +36,13 @@ export default makeScene2D(function* (view) {
     root().children([...root().children(), <File name={"include"} />]);
 
     yield* waitFor(1);
+
+    yield* src().closeFolder();
+
+    yield* waitFor(1);
+
+    yield* src().openFolder();
+
+    yield* waitFor(1);
+
 });
