@@ -1,6 +1,6 @@
 import { Icon, Layout, LayoutProps, signal } from "@motion-canvas/2d";
-import { DEFAULT, SignalValue, SimpleSignal } from "@motion-canvas/core";
-import { animationTime, fileTypeMap, gapMedium, gapNormal, iconSize, marginLeft, specialFiles } from "../theme/Theme";
+import { all, DEFAULT, SignalValue, SimpleSignal, Thread, ThreadGenerator } from "@motion-canvas/core";
+import { animationTime, fileTypeMap, gapMedium, gapNormal, iconSize, marginLeft, opacitySemi, specialFiles } from "../theme/Theme";
 import { MyTxt } from "./My/MyTxt";
 
 export interface FileProps extends LayoutProps {
@@ -39,6 +39,31 @@ export class File extends Layout {
     public *closeFolder(duration: number = animationTime) {
         const layout = this.children()[0] as Layout;
         yield* this.height(layout.height(), duration);
+    }
+
+    public *highlight(file: File,duration: number = animationTime): ThreadGenerator {
+        const toDark = this.getFileChildrens().filter(child => child != file);
+        
+        yield* all(
+            ...toDark.map(child => all(
+                child.children()[0].opacity(opacitySemi, duration),
+                child.highlight(file, duration)
+            )),
+            file.opacity(1, duration)
+        );
+    }
+
+    public *unhighlight(duration: number = animationTime): ThreadGenerator {
+        const toLight = this.getFileChildrens();
+        
+        yield* all(...toLight.map(child => all(
+            child.children()[0].opacity(1, duration),
+            child.unhighlight(duration)
+        )));
+    }
+
+    private getFileChildrens(): File[] {
+        return this.children().filter(child => child instanceof File);
     }
 
     private getEntryIconAndColor(): { icon: string, color: string } {

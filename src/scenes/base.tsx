@@ -78,4 +78,6 @@ export default makeScene2D(function* (view) {
         root_cmake().opacity(opacitySemi, animationTime),
         code().code(mathCppCode, animationTime),
     );
+
+    yield* waitFor(1);
 });
