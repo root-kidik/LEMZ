@@ -1,6 +1,7 @@
-import { Icon, Layout, LayoutProps, signal, Txt } from "@motion-canvas/2d";
+import { Icon, Layout, LayoutProps, signal } from "@motion-canvas/2d";
 import { DEFAULT, SignalValue, SimpleSignal } from "@motion-canvas/core";
-import { animationTime, colorWhite, entryTextSize, fileTypeMap, fontFamilyDefault, fontWeightBold, gapNormal, iconSize, marginLeft, specialFiles } from "../theme/Theme";
+import { animationTime, fileTypeMap, gapMedium, gapNormal, iconSize, marginLeft, specialFiles } from "../theme/Theme";
+import { MyTxt } from "./My/MyTxt";
 
 export interface FileProps extends LayoutProps {
     name: SignalValue<string>;
@@ -15,6 +16,7 @@ export class File extends Layout {
             direction: "column",
             layout: true,
             clip: true,
+            gap: gapNormal,
             marginLeft: () => this.getDepth() == 0 ? 0 : (this.getDepth() - 1) * marginLeft,
             ...props,
         });
@@ -22,22 +24,16 @@ export class File extends Layout {
         if (this.name().length <= 0) return;
 
         this.insert(
-            <Layout layout gap={gapNormal} alignItems={"center"}>
+            <Layout
+                layout
+                gap={gapMedium}
+                alignItems={"center"}
+            >
                 <Icon icon={() => this.getEntryIconAndColor().icon} size={iconSize} color={() => this.getEntryIconAndColor().color} />
-                <Txt
-                    fontFamily={fontFamilyDefault}
-                    fontWeight={fontWeightBold}
-                    fontSize={entryTextSize}
-                    fill={colorWhite}
-                    opacity={1}
-                    text={this.name}
-                />
+
+                <MyTxt text={this.name} />
             </Layout>
         );
-    }
-
-    public addFile(file: SimpleSignal<File>) {
-        this.children([...this.children(), file()]);
     }
 
     public *openFolder(duration: number = animationTime) {
