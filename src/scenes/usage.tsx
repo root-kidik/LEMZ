@@ -9,7 +9,20 @@ cmake_minimum_required(VERSION 3.25)
 
 project(Summator)
 
-add_executable(\${PROJECT_NAME} Main.cpp)`;
+add_subdirectory(libs/Math)
+
+add_executable(\${PROJECT_NAME} Main.cpp)
+target_link_libraries(\${PROJECT_NAME} Math)`;
+
+const rootMainCppCode = CODE`\
+#include <print>
+
+int sum(int, int);
+
+int main() 
+{
+    std::println(sum(1, 3)); 
+}`;
 
 export default makeScene2D(function* (view) {
     const root = createFile("");
@@ -46,7 +59,10 @@ export default makeScene2D(function* (view) {
 
     yield* waitFor(1);
 
-    yield* root().unhighlight();
+    yield* all(
+        root().highlight(root_main()),
+        code().code(rootMainCppCode, animationTime)
+    );
 
     yield* waitFor(1);
 });
