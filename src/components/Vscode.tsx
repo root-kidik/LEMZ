@@ -19,6 +19,7 @@ export class Vscode extends MyRect {
             height: "100%",
             width: "100%",
             fill: colorBlack,
+            lineWidth: 0,
             direction: "row",
             ...props,
         });

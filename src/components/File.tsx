@@ -24,11 +24,7 @@ export class File extends Layout {
         if (this.name().length <= 0) return;
 
         this.insert(
-            <Layout
-                layout
-                gap={gapMedium}
-                alignItems={"center"}
-            >
+            <Layout layout gap={gapMedium} alignItems={"center"} >
                 <Icon icon={() => this.getEntryIconAndColor().icon} size={iconSize} color={() => this.getEntryIconAndColor().color} />
 
                 <MyTxt text={this.name} />
