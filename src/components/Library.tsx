@@ -1,30 +1,29 @@
-import { Icon, Layout, Rect, RectProps, signal } from "@motion-canvas/2d";
+import { Layout, RectProps, signal } from "@motion-canvas/2d";
 import { SignalValue, SimpleSignal } from "@motion-canvas/core";
-import { colorSemiSemiBlack, colorWhite, lineWidthNormal, paddingBig, radiusNormal } from "../theme/Theme";
+import { colorSemiSemiBlack, gapNormal, lineWidthNormal } from "../theme/Theme";
 import { MyTxt } from "./My/MyTxt";
+import { MyRect } from "./My/MyRect";
 
-export interface FileProps extends RectProps {
+export interface LibraryProps extends RectProps {
     name: SignalValue<string>;
 }
 
-export class Library extends Rect {
+export class Library extends MyRect {
     @signal()
     public declare readonly name: SimpleSignal<string, this>;
 
-    public constructor(props: FileProps) {
+    public constructor(props: LibraryProps) {
         super({
             direction: "column",
-            layout: true,
             stroke: colorSemiSemiBlack,
             lineWidth: lineWidthNormal,
-            padding: paddingBig,
-            radius: radiusNormal,
+            gap: gapNormal,
             ...props,
         });
 
         this.add(
             <>
-                <Layout>
+                <Layout layout>
                     <MyTxt text={this.name} />
                 </Layout>
 

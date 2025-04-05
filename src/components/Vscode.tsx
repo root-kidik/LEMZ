@@ -1,7 +1,9 @@
 import { Code, Rect, RectProps } from "@motion-canvas/2d";
-import { colorBlack, colorSemiBlack, fontFamilyDefault, fontSizeNormal, fontWeightBold, gapBig, gapNormal, paddingBig, radiusNormal } from "../theme/Theme";
+import { colorBlack, fontFamilyDefault, fontSizeNormal, fontWeightBold } from "../theme/Theme";
 import { File } from "./File";
 import { createRef, Reference, SignalValue } from "@motion-canvas/core";
+import { MyRect } from "./My/MyRect";
+import { MyCode } from "./My/MyCode";
 
 export interface VscodeProps extends RectProps {
     root: SignalValue<File>;
@@ -10,45 +12,24 @@ export interface VscodeProps extends RectProps {
     code: Reference<Code>;
 }
 
-export class Vscode extends Rect {
+export class Vscode extends MyRect {
     public constructor(props?: VscodeProps) {
         super({
             layout: true,
-            padding: paddingBig,
-            gap: gapBig,
             height: "100%",
             width: "100%",
             fill: colorBlack,
+            direction: "row",
             ...props,
         });
 
         this.add(
             <>
-                <Rect
-                    layout
-                    padding={paddingBig}
-                    direction={"column"}
-                    gap={gapNormal}
-                    fill={colorSemiBlack}
-                    radius={radiusNormal}
-                    ref={props.filebar}
-                    children={props.root}
-                />
+                <MyRect ref={props.filebar} children={props.root}/>
 
-                <Rect
-                    layout
-                    ref={props.code_layout}
-                    fill={colorSemiBlack}
-                    radius={radiusNormal}
-                    width={"100%"}
-                >
-                    <Code
-                        ref={props.code}
-                        fontFamily={fontFamilyDefault}
-                        fontWeight={fontWeightBold}
-                        fontSize={fontSizeNormal}
-                    />
-                </Rect>
+                <MyRect ref={props.code_layout} width={"100%"} >
+                    <MyCode ref={props.code} />
+                </MyRect>
             </>
         );
     }
@@ -56,16 +37,7 @@ export class Vscode extends Rect {
     public addAnimationLayout(): Reference<Rect> {
         const animation_layout = createRef<Rect>(); 
         
-        this.add(
-            <Rect
-                layout
-                ref={animation_layout}
-                direction={"column"}
-                gap={gapNormal}
-                fill={colorSemiBlack}
-                radius={radiusNormal}
-            />
-        );
+        this.add(<MyRect ref={animation_layout} />);
 
         return animation_layout;
     }
