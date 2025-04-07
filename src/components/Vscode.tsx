@@ -6,10 +6,11 @@ import { MyRect } from "./My/MyRect";
 import { MyCode } from "./My/MyCode";
 
 export interface VscodeProps extends RectProps {
-    root: SignalValue<File>;
-    filebar: Reference<Rect>;
-    code_layout: Reference<Rect>;
+    root?: SignalValue<File>;
+    filebar?: Reference<Rect>;
+    code_layout?: Reference<Rect>;
     code: Reference<Code>;
+    disable_filebar?: boolean;
 }
 
 export class Vscode extends MyRect {
@@ -24,9 +25,12 @@ export class Vscode extends MyRect {
             ...props,
         });
 
+        if (!props.disable_filebar)
+            props.disable_filebar = false;
+
         this.add(
             <>
-                <MyRect ref={props.filebar} children={props.root}/>
+                { !props.disable_filebar && <MyRect ref={props.filebar} children={props.root}/> }
 
                 <MyRect ref={props.code_layout} width={"100%"} >
                     <MyCode ref={props.code} />
