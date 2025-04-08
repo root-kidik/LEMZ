@@ -1,9 +1,9 @@
 import { CODE, lines, makeScene2D, word } from '@motion-canvas/2d';
-import { Vscode } from '../../components/Vscode';
-import { all, createRef, DEFAULT, Direction, slideTransition, waitFor } from '@motion-canvas/core';
-import { MyCode } from '../../components/My/MyCode';
-import { animationTime } from '../../theme/Theme';
-import { MyRect } from '../../components/My/MyRect';
+import { Vscode } from '../../../../components/Vscode';
+import { all, beginSlide, createRef, DEFAULT, Direction, slideTransition, waitFor } from '@motion-canvas/core';
+import { MyCode } from '../../../../components/My/MyCode';
+import { animationTime } from '../../../../theme/Theme';
+import { MyRect } from '../../../../components/My/MyRect';
 
 const cppCodeOriginal = CODE`\
 int compute(int n)
@@ -94,174 +94,138 @@ export default makeScene2D(function* (view) {
         <Vscode ref={vscode} code={cppCode} disable_filebar={true} />
     );
 
-    yield* slideTransition(Direction.Right);
-
-    // голый цикл
-
-    yield* cppCode().code(cppCodeOriginal, animationTime);
-
-    yield* waitFor(1);
+    yield* cppCode().code(cppCodeOriginal, 0);
 
     const asmLayout = createRef<MyRect>();
     const asmCode = createRef<MyCode>();
 
     yield* vscode().add(
-        <MyRect ref={asmLayout} width={0} >
-            <MyCode ref={asmCode} />
+        <MyRect ref={asmLayout} width={"100%"} >
+            <MyCode code={asmCodeNotOptimized} ref={asmCode} />
         </MyRect>
     );
 
-    // простая функция
+    yield* slideTransition(Direction.Right);
 
-    yield* all(
-        asmLayout().width("100%", animationTime),
-        asmCode().code(asmCodeNotOptimized, animationTime)
-    );
-
-    yield* waitFor(1);
+    yield* beginSlide("Пролог функции");
 
     yield* all(
         cppCode().selection(lines(1), animationTime),
         asmCode().selection(lines(1, 2), animationTime)
     );
 
-    yield* waitFor(1);
+    yield* beginSlide("Аргументы функции");
 
     yield* all(
         cppCode().selection(word(0, 12, 5), animationTime),
         asmCode().selection(lines(3), animationTime)
     );
 
-    yield* waitFor(1);
+    yield* beginSlide("Аргументы функции развернуто");
 
     cppCode().save();
     yield* all(
         cppCode().code(cppCodeOriginalIntN, animationTime),
         cppCode().selection(lines(2), animationTime)
     );
-    yield* waitFor(1);
+
+    yield* beginSlide("Аккумулятор Sum");
 
     yield* cppCode().restore(animationTime);
-
-    yield* waitFor(1);
 
     yield* all(
         cppCode().selection(lines(2), animationTime),
         asmCode().selection(lines(4), animationTime)
     );
 
-    yield* waitFor(1);
+    yield* beginSlide("Аккумулятор цикла");
 
     yield* all(
         cppCode().selection(word(3, 9, 9), animationTime),
         asmCode().selection(lines(5), animationTime)
     );
 
-    yield* waitFor(1);
 
-    // int i = 0;
+    yield* beginSlide("Аккумулятор цикла развернуто");
 
     cppCode().save();
     yield* all(
         cppCode().code(cppCodeOriginalIntI, animationTime),
         cppCode().selection(lines(3), animationTime)
     );
-    yield* waitFor(1);
+
+    yield* beginSlide("Метка циклв");
 
     yield* cppCode().restore(animationTime);
-
-    yield* waitFor(1);
-
-    // начинаем цикл
 
     yield* all(
         cppCode().selection(lines(3, 4), animationTime),
         asmCode().selection(lines(6), animationTime)
     );
 
-    yield* waitFor(1);
-
-    // загрузка счётчика
+    yield* beginSlide("Загрузка счётчика");
 
     yield* all(
         cppCode().selection(word(3, 13, 5), animationTime),
         asmCode().selection(lines(7), animationTime)
     );
 
-    yield* waitFor(1);
-
-    // сравнение счётчика с n
+    yield* beginSlide("Сравнение счётчика с n");
 
     yield* all(
         cppCode().selection(word(3, 20, 5), animationTime),
         asmCode().selection(lines(8), animationTime)
     );
 
-    yield* waitFor(1);
-
-    // прыжок в return
+    yield* beginSlide("Прыжок в return");
 
     yield* all(
         cppCode().selection(word(3, 20, 5), animationTime),
         asmCode().selection(lines(9), animationTime)
     );
 
-    yield* waitFor(1);
-
-    // загрузка счётчика 2
+    yield* beginSlide("Повторная загрузка счётчика");
 
     yield* all(
         cppCode().selection(word(3, 13, 5), animationTime),
         asmCode().selection(lines(10), animationTime)
     );
 
-    yield* waitFor(1);
-
-    // сдвиг на 0
+    yield* beginSlide("Побитовый сдвиг на 0 бит");
 
     yield* all(
         asmCode().selection(lines(11), animationTime)
     );
 
-    yield* waitFor(1);
-
-    // добавляем 6
+    yield* beginSlide("Прибавление 6");
 
     yield* all(
         cppCode().selection(word(4, 23, 5), animationTime),
         asmCode().selection(lines(12), animationTime)
     );
 
-    yield* waitFor(1);
-
-    // добавляем n
+    yield* beginSlide("Прибавление n");
 
     yield* all(
         cppCode().selection(word(4, 29, 3), animationTime),
         asmCode().selection(lines(13), animationTime)
     );
 
-    yield* waitFor(1);
-
-    // вычитаем 40
+    yield* beginSlide("Вычитаем 40");
 
     yield* all(
-        cppCode().selection(word(4, 35, 6), animationTime),
+        cppCode().selection(word(4, 33, 8), animationTime),
         asmCode().selection(lines(14), animationTime)
     );
 
-    yield* waitFor(1);
-
-    // прибавляем в sum
+    yield* beginSlide("Прибавляем sum");
 
     yield* all(
         cppCode().selection(word(4, 12, 2), animationTime),
         asmCode().selection(lines(15), animationTime)
     );
 
-    yield* waitFor(1);
-
-    // записываем в sum
+    yield* beginSlide("Записываем в sum");
 
     yield* all(
         cppCode().selection(word(4, 12, 2), animationTime),
@@ -270,80 +234,64 @@ export default makeScene2D(function* (view) {
 
     yield* waitFor(1);
 
-    // загружаем в eax - i и прибавляем + 1
+    yield* beginSlide("Загружаем в eax - i и прибавляем + 1");
 
     yield* all(
         cppCode().selection(word(3, 27, 3), animationTime),
         asmCode().selection(lines(17, 18), animationTime)
     );
 
-    yield* waitFor(1);
-
-    // загружаем в eax - в i, и прыжок на начало цикла
+    yield* beginSlide("Загружаем в eax - в i, и прыжок на начало цикла");
 
     yield* all(
         asmCode().selection(lines(19, 20), animationTime)
     );
 
-    yield* waitFor(1);
-
-    // загружаем sum в eax и return
+    yield* beginSlide("Загружаем sum в eax и return");
 
     yield* all(
         asmCode().selection(lines(22, 24), animationTime)
     );
 
-    yield* waitFor(1);
-
-    // сбрасываем подсветку
+    yield* beginSlide("Сбрасываем подсветку");
 
     yield* all(
         cppCode().selection(DEFAULT, animationTime),
         asmCode().selection(DEFAULT, animationTime)
     );
 
-    yield* waitFor(1);
-
-    // оптимизированный asm код
+    yield* beginSlide("Оптимизированный asm код");
 
     yield* all(
         asmCode().code(asmCodeOptimized, animationTime)
     );
 
-    yield* waitFor(1);
-
-    // проверка на ноль
+    yield* beginSlide("Проверка на ноль");
 
     yield* all(
         cppCode().selection(word(3, 20, 5), animationTime),
         asmCode().selection(lines(1, 2), animationTime)
     );
 
-    yield* waitFor(1);
-
-    // всё остальное
+    yield* beginSlide("Всё остальное");
 
     yield* all(
         cppCode().selection(lines(4), animationTime),
         asmCode().selection(lines(3, 12), animationTime)
     );
 
-    yield* waitFor(1);
-
-    // сбрасываем подсветку
+    yield* beginSlide("Сбрасываем подсветку");
 
     yield* all(
         cppCode().selection(DEFAULT, animationTime),
         asmCode().selection(DEFAULT, animationTime)
     );
 
-    yield* waitFor(1);
-
-    // показываю оба asm
+    yield* beginSlide("Сравнение двух asm");
 
     yield* all(
         cppCode().code(asmCodeOptimized, animationTime)
     );
 
-    yield* waitFor(1);
+    yield* beginSlide("Конец");
 });

@@ -1,9 +1,9 @@
 import { CODE, makeScene2D } from '@motion-canvas/2d';
-import { Vscode } from '../../components/Vscode';
-import { all, createRef, Direction, slideTransition, waitFor } from '@motion-canvas/core';
-import { MyCode } from '../../components/My/MyCode';
-import { animationTime } from '../../theme/Theme';
-import { MyRect } from '../../components/My/MyRect';
+import { all, beginSlide, createRef, Direction, slideTransition, waitFor } from '@motion-canvas/core';
+import { MyCode } from '../../../../components/My/MyCode';
+import { Vscode } from '../../../../components/Vscode';
+import { animationTime } from '../../../../theme/Theme';
+import { MyRect } from '../../../../components/My/MyRect';
 
 const cppCodeIf = CODE`\
 int computeIf(const std::vector<int>& v)
@@ -15,8 +15,7 @@ int computeIf(const std::vector<int>& v)
             sum += i;
 
     return sum;
-}
-`;
+}`;
 
 const cppCodeNotIf = CODE`\
 int computeNotIf(
@@ -39,31 +38,18 @@ export default makeScene2D(function* (view) {
         <Vscode ref={vscode} code={cppCode} disable_filebar={true} />
     );
 
-    yield* slideTransition(Direction.Right);
-
-    yield* waitFor(1);
-
-    // голый цикл
-
-    yield* cppCode().code(cppCodeIf, animationTime);
-
-    yield* waitFor(1);
+    yield* cppCode().code(cppCodeIf, 0);
 
     const asmLayout = createRef<MyRect>();
     const asmCode = createRef<MyCode>();
 
     yield* vscode().add(
-        <MyRect ref={asmLayout} width={0} >
-            <MyCode ref={asmCode} />
+        <MyRect ref={asmLayout} width={"100%"} >
+            <MyCode code={cppCodeNotIf} ref={asmCode} />
         </MyRect>
     );
 
-    // простая функция
+    yield* slideTransition(Direction.Right);
 
-    yield* all(
-        asmLayout().width("100%", animationTime),
-        asmCode().code(cppCodeNotIf, animationTime)
-    );
-
-    yield* waitFor(1);
+    yield* beginSlide("Конец");
 });

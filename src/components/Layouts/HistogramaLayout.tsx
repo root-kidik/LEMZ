@@ -1,6 +1,5 @@
 import { Layout, LayoutProps } from "@motion-canvas/2d";
 import { paddingBig } from "../../theme/Theme";
-import { MyRect } from "../My/MyRect";
 import { Histograma } from "../Histograma";
 import { Reference } from "@motion-canvas/core";
 

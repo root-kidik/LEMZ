@@ -1,56 +1,61 @@
 import { CODE, lines, makeScene2D } from '@motion-canvas/2d';
+import { all, beginSlide, createRef, Direction, slideTransition, waitFor } from '@motion-canvas/core';
 import { Vscode } from '../../../../components/Vscode';
-import { all, beginSlide, createRef, Direction, slideTransition } from '@motion-canvas/core';
 import { MyCode } from '../../../../components/My/MyCode';
-import { animationTime, fontSizeSmall } from '../../../../theme/Theme';
 import { MyRect } from '../../../../components/My/MyRect';
+import { animationTime, fontSizeSmall } from '../../../../theme/Theme';
 
 const cppCodeOriginal = CODE`\
-int computeLoop(int n)
+int computeIf(const std::vector<int>& v)
 {
     int sum = 0;
-    for (int i = 0; i < n; i++)
-        sum += i * 1 + 2 * 3 + n - 4 * 10;
+    for (auto i : v) 
+        if (i % 2 == 0) 
+            sum += i;
     return sum;
 }
 
-int computeFormula(int n)
+int computeNotIf(
+    const std::vector<int>& v_odd, 
+    const std::vector<int>& v_even)
 {
-    if (n <= 0) return 0;
-    return (n * (n - 1)) / 2 + n * n - 34 * n;
+    int sum = 0;
+    for (auto i : v_odd) sum += i;
+    for (auto i : v_even) sum += i;
+    return sum;
 }`;
 
 const bechmarkCodeCpp = CODE`\
 using namespace std::chrono;
 
-template <typename Func, typename Arg>
-nanoseconds mt(
-    Func func, Arg arg, int iterations)
+template <typename Func, typename... Args>
+nanoseconds mt(Func func, int iterations, Args&&... args)
 {
     nanoseconds total{0};
-
     for (int i = 0; i < iterations; i++)
     {
         auto start = high_resolution_clock::now();
-        
-        auto dummy += func(arg);
+        auto dummy = func(std::forward<Args>(args)...); 
         asm volatile(" " : "+r"(dummy) : : "memory");
-
         auto end = high_resolution_clock::now();
         total += end - start;
     }
-
-    return nanoseconds{total.count() / iterations};
+    return nanoseconds{
+        static_cast<double>(total.count()) / iterations
+    };
 }
 
 int main()
 {
     const int iterations = 1'000;
-    const int n = 1'000'000;
+    const int n = 1'000'000;         
 
-    std::println(mt(computeLoop, n, iterations));
+    auto vec = genVec(n);
+    auto v_odd = genVec(n / 2);  
+    auto v_even = genVec(n / 2); 
 
-    std::println(mt(computeFormula, n, iterations));
+    std::println(mt(computeIf, iterations, vec));
+    std::println(mt(computeNotIf, iterations, v_odd, v_even));
 }`;
 
 export default makeScene2D(function* (view) {
@@ -66,18 +71,17 @@ export default makeScene2D(function* (view) {
 
     yield* vscode().add(
         <MyRect ref={bechmarkCodeLayout} width={"100%"} >
-            <MyCode ref={bechmarkCode} />
+            <MyCode code={bechmarkCodeCpp} ref={bechmarkCode} />
         </MyRect>
     );
 
-    yield* slideTransition(Direction.Right);
-
     yield* all(
-        cppCode().fontSize(fontSizeSmall, 0),
         bechmarkCode().fontSize(fontSizeSmall, 0),
-        bechmarkCode().code(bechmarkCodeCpp, animationTime),
-        cppCode().code(cppCodeOriginal, animationTime)
+        cppCode().fontSize(fontSizeSmall, 0),
+        cppCode().code(cppCodeOriginal, 0)
     );
+
+    yield* slideTransition(Direction.Right);
 
     yield* beginSlide("compute Functions");
 
@@ -88,14 +92,14 @@ export default makeScene2D(function* (view) {
     yield* beginSlide("Main");
 
     yield* all(
-        cppCode().selection(lines(15), animationTime),
-        bechmarkCode().selection(lines(22, 30), animationTime)
+        cppCode().selection(lines(8), animationTime),
+        bechmarkCode().selection(lines(19, 30), animationTime)
     );
 
-    yield* beginSlide("MeasureTime");
+    yield* beginSlide("mt");
 
     yield* all(
-        bechmarkCode().selection(lines(2, 20), animationTime)
+        bechmarkCode().selection(lines(2, 17), animationTime)
     );
 
     yield* beginSlide("Конец");

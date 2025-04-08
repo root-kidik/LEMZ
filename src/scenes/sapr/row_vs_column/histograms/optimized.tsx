@@ -6,15 +6,15 @@ import { Histograma } from "../../../../components/Histograma";
 export default makeScene2D(function* (view) {
     const histograma = createRef<Histograma>();
 
-    view.add(<HistogramaLayout histograma={histograma} upperBoundValue={40} />);
+    view.add(<HistogramaLayout histograma={histograma} upperBoundValue={1000000000} />);
 
     yield* slideTransition(Direction.Right);
 
     yield* histograma().show();
 
     yield* histograma().showHistograms([
-        { name: "loop", value: 20 },
-        { name: "formula", value: 20 },
+        { name: "if", value: 526673315 },
+        { name: "not if", value: 526571583 },
     ]);
 
     yield* beginSlide("Конец");

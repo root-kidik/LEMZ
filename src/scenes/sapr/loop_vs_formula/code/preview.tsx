@@ -1,6 +1,6 @@
 import { CODE, makeScene2D } from '@motion-canvas/2d';
 import { Vscode } from '../../../../components/Vscode';
-import { all, createRef, waitFor } from '@motion-canvas/core';
+import { all, beginSlide, createRef } from '@motion-canvas/core';
 import { MyCode } from '../../../../components/My/MyCode';
 import { animationTime } from '../../../../theme/Theme';
 import { MyRect } from '../../../../components/My/MyRect';
@@ -74,13 +74,9 @@ export default makeScene2D(function* (view) {
         <Vscode ref={vscode} code={cppCode} disable_filebar={true} />
     );
 
-    yield* waitFor(1);
-
-    // голый цикл
-
     yield* cppCode().code(cppCodeOriginal, animationTime);
 
-    yield* waitFor(1);
+    yield* beginSlide("Сравнение двух функций");
 
     const asmLayout = createRef<MyRect>();
     const asmCode = createRef<MyCode>();
@@ -91,16 +87,12 @@ export default makeScene2D(function* (view) {
         </MyRect>
     );
 
-    // простая функция
-
     yield* all(
         asmLayout().width("100%", animationTime),
         asmCode().code(cppCodeNotOriginal, animationTime)
     );
 
-    yield* waitFor(1);
-
-    // сравнение дву asm
+    yield* beginSlide("Сравнение двух ассемблеров");
 
     cppCode().save();
     asmCode().save();
@@ -109,5 +101,5 @@ export default makeScene2D(function* (view) {
         asmCode().code(asmCodeOptimized, animationTime)
     );
 
-    yield* waitFor(1);
+    yield* beginSlide("Конец");
 });
