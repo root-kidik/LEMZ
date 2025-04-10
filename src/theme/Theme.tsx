@@ -1,3 +1,5 @@
+import { mdiCodeJson, mdiCog, mdiCube, mdiFileOutline, mdiFolder, mdiGit, mdiLanguageCpp, mdiMapMarkerDown, mdiTuneVariant,  mdiNotebook, mdiBookAlphabet } from "@mdi/js";
+
 export const colorBlack = "rgb(10, 10, 10)";
 export const colorSemiBlack = "rgb(20, 20, 20)";
 export const colorSemiSemiBlack = "rgb(30, 30, 30)";
@@ -8,6 +10,8 @@ export const colorSemiGrey = "rgb(150, 150, 150)";
 export const colorWhite = "rgb(220, 220, 220)";
 export const colorBlue = "rgb(0, 20, 200)";
 export const colorRed = "rgb(170, 20, 20)";
+export const colorWhiteBlue = "rgb(51,166,255)";
+export const colorGreen = "rgb(50, 190, 20)";
 
 export const paddingBig = 40;
 
@@ -35,20 +39,23 @@ export const iconSize = 48;
 export const entryTextSize = 24;
 
 export const fileTypeMap: { [key: string]: { icon: string; color: string } } = {
-    '.git': { icon: 'mdi-git', color: '#F06292' },
-    'folder': { icon: 'mdi-folder', color: '#98BC34' },
-    'default': { icon: 'mdi-file-outline', color: '#B0BEC5' },
-    'cpp': { icon: 'mdi-language-cpp', color: '#4FC3F7' },
-    'hpp': { icon: 'mdi-language-cpp', color: '#4FC3F7' },
-    'md': { icon: 'mdi-markdown', color: '#E0E0E0' },
-    'json': { icon: 'mdi-code-json', color: '#FFB74D' },
+    '.git': { icon: mdiGit, color: '#F06292' },
+    'folder': { icon: mdiFolder, color: '#98BC34' },
+    'default': { icon: mdiFileOutline, color: '#B0BEC5' },
+    'cpp': { icon: mdiLanguageCpp, color: '#4FC3F7' },
+    'hpp': { icon: mdiLanguageCpp, color: '#4FC3F7' },
+    'md': { icon: mdiMapMarkerDown, color: '#E0E0E0' },
+    'json': { icon: mdiCodeJson, color: '#FFB74D' },
+    'a': {icon: mdiNotebook, color: '#64B5F6'},
+    'o': {icon: mdiBookAlphabet, color: '#64B5F6'}
 };
 
 export const specialFiles: { [key: string]: { icon: string; color: string } } = {
-    'gitignore': { icon: 'mdi-git', color: '#F06292' },
-    'clang-format': { icon: 'mdi-cog', color: '#26A69A' },
-    'clang-tidy': { icon: 'mdi-tune-variant', color: '#26A69A' },
-    'cmakelists.txt': { icon: 'mdi-cube', color: '#64B5F6' },
+    'gitignore': { icon: mdiGit, color: '#F06292' },
+    'clang-format': { icon: mdiCog, color: '#26A69A' },
+    'clang-tidy': { icon: mdiTuneVariant, color: '#26A69A' },
+    'cmakelists.txt': { icon: mdiCube, color: '#64B5F6' },
+    'makefile': { icon: mdiCog, color: '#FFB74D' }
 };
 
 export const animationTime = 0.5;

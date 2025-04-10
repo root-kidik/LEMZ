@@ -1,19 +1,19 @@
-import { Code, Rect, RectProps } from "@motion-canvas/2d";
-import { colorBlack, fontFamilyDefault, fontSizeNormal, fontWeightBold } from "../theme/Theme";
+import { Code, Layout, Rect, RectProps } from "@motion-canvas/2d";
+import { animationTime, colorBlack, gapBig } from "../theme/Theme";
 import { File } from "./File";
-import { createRef, Reference, SignalValue } from "@motion-canvas/core";
+import { all, createRef, DEFAULT, Reference, SignalValue, SimpleSignal } from "@motion-canvas/core";
 import { MyRect } from "./My/MyRect";
 import { MyCode } from "./My/MyCode";
+import { Console } from "./Console";
 
 export interface VscodeProps extends RectProps {
-    root?: SignalValue<File>;
-    filebar?: Reference<Rect>;
-    code_layout?: Reference<Rect>;
+    code_layout?: Reference<MyRect>;
     code: Reference<Code>;
-    disable_filebar?: boolean;
 }
 
 export class Vscode extends MyRect {
+    private middle_layout: Reference<Layout>;
+
     public constructor(props?: VscodeProps) {
         super({
             layout: true,
@@ -25,25 +25,48 @@ export class Vscode extends MyRect {
             ...props,
         });
 
-        if (!props.disable_filebar)
-            props.disable_filebar = false;
+        this.middle_layout = createRef<Layout>();
 
         this.add(
-            <>
-                { !props.disable_filebar && <MyRect ref={props.filebar} children={props.root}/> }
-
-                <MyRect ref={props.code_layout} width={"100%"} >
+            <Layout width={"100%"} ref={this.middle_layout} direction={"column"}>
+                <MyRect ref={props.code_layout} height={"100%"} width={"100%"} >
                     <MyCode ref={props.code} />
                 </MyRect>
-            </>
+            </Layout>
         );
     }
 
-    public addAnimationLayout(): Reference<Rect> {
-        const animation_layout = createRef<Rect>(); 
-        
-        this.add(<MyRect ref={animation_layout} />);
+    public *showFilebar(filebar: Reference<MyRect>, root: SimpleSignal<File>, duration: number = animationTime) {
+        yield* all(
+            ...root().childrenAs<Layout>().map(child => all(
+                child.width(0, 0)
+            ))
+        );
+
+        this.insert(<MyRect is_hidden ref={filebar} children={root} />);
+
+        yield* all(
+            filebar().appear(duration),
+            ...root().childrenAs<Layout>().map(child => all(
+                child.width(DEFAULT, duration)
+            ))
+        );
+    }
+
+    public addAnimationLayout(): Reference<MyRect> {
+        const animation_layout = createRef<MyRect>();
+
+        this.add(<MyRect alignItems={"center"} is_hidden ref={animation_layout} />);
 
         return animation_layout;
+    }
+
+    public *showConsole(console: Reference<Console>, duration: number = animationTime) {
+        this.middle_layout().add(<Console ref={console} />);
+
+        yield* all(
+            console().appear(duration),
+            this.middle_layout().gap(gapBig, duration)
+        );
     }
 }

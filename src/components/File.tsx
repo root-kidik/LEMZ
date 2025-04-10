@@ -1,7 +1,8 @@
-import { Icon, Layout, LayoutProps, signal } from "@motion-canvas/2d";
-import { all, DEFAULT, SignalValue, SimpleSignal, Thread, ThreadGenerator, useLogger } from "@motion-canvas/core";
+import { Layout, LayoutProps, signal } from "@motion-canvas/2d";
+import { all, DEFAULT, SignalValue, SimpleSignal, ThreadGenerator } from "@motion-canvas/core";
 import { animationTime, fileTypeMap, gapMedium, gapNormal, iconSize, marginLeft, opacitySemi, specialFiles } from "../theme/Theme";
 import { MyTxt } from "./My/MyTxt";
+import { MySVG } from "./My/MySvg";
 
 export interface FileProps extends LayoutProps {
     name: SignalValue<string>;
@@ -25,7 +26,7 @@ export class File extends Layout {
 
         this.insert(
             <Layout layout gap={gapMedium} alignItems={"center"} >
-                <Icon icon={() => this.getEntryIconAndColor().icon} size={iconSize} color={() => this.getEntryIconAndColor().color} />
+                <MySVG mdi={() => this.getEntryIconAndColor().icon} color={() => this.getEntryIconAndColor().color} />
 
                 <MyTxt text={this.name} />
             </Layout>
@@ -96,5 +97,16 @@ export class File extends Layout {
 
     private isFolder(): boolean {
         return this.children().length > 1;
+    }
+
+    public *addFile(file: SimpleSignal<File>, duration: number = animationTime) {
+        const fileText = file().name();
+        yield* file().name("", 0);
+
+        this.add(file());
+        yield* all(
+            this.highlight(file()),
+            file().name(fileText, duration)
+        );
     }
 }

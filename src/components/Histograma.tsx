@@ -1,7 +1,7 @@
 import { Layout, Rect, RectProps } from "@motion-canvas/2d";
 import { all, createRef, Reference } from "@motion-canvas/core";
 import { MyGrid } from "./My/MyGrid";
-import { animationTime, colorGrey, colorRed, colorSemiBlack, colorSemiGrey, gapBig, gapMedium, historamWidth, lineWidthBorderGrid, paddingBig } from "../theme/Theme";
+import { animationTime, colorRed, colorSemiGrey, gapBig, historamWidth, lineWidthBorderGrid, paddingBig } from "../theme/Theme";
 import { MyTxt } from "./My/MyTxt";
 import { MyRect } from "./My/MyRect";
 
