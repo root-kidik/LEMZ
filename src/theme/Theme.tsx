@@ -1,4 +1,4 @@
-import { mdiCodeJson, mdiCog, mdiCube, mdiFileOutline, mdiFolder, mdiGit, mdiLanguageCpp, mdiMapMarkerDown, mdiTuneVariant,  mdiNotebook, mdiBookAlphabet } from "@mdi/js";
+import { mdiCodeJson, mdiCog, mdiCube, mdiFileOutline, mdiFolder, mdiGit, mdiLanguageCpp, mdiMapMarkerDown, mdiTuneVariant,  mdiNotebook, mdiBookAlphabet, mdiNinja, mdiWrench } from "@mdi/js";
 
 export const colorBlack = "rgb(10, 10, 10)";
 export const colorSemiBlack = "rgb(20, 20, 20)";
@@ -47,7 +47,8 @@ export const fileTypeMap: { [key: string]: { icon: string; color: string } } = {
     'md': { icon: mdiMapMarkerDown, color: '#E0E0E0' },
     'json': { icon: mdiCodeJson, color: '#FFB74D' },
     'a': {icon: mdiNotebook, color: '#64B5F6'},
-    'o': {icon: mdiBookAlphabet, color: '#64B5F6'}
+    'o': {icon: mdiBookAlphabet, color: '#64B5F6'},
+    'ninja': {icon: mdiNinja, color: '#64B5F6'}
 };
 
 export const specialFiles: { [key: string]: { icon: string; color: string } } = {
@@ -55,7 +56,8 @@ export const specialFiles: { [key: string]: { icon: string; color: string } } = 
     'clang-format': { icon: mdiCog, color: '#26A69A' },
     'clang-tidy': { icon: mdiTuneVariant, color: '#26A69A' },
     'cmakelists.txt': { icon: mdiCube, color: '#64B5F6' },
-    'makefile': { icon: mdiCog, color: '#FFB74D' }
+    'makefile': { icon: mdiCog, color: '#FFB74D' },
+    'jenkinsfile': { icon: mdiWrench, color: colorRed }
 };
 
 export const animationTime = 0.5;

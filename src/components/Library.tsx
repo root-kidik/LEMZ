@@ -13,8 +13,8 @@ export class Library extends MyRect {
     public declare readonly name: SimpleSignal<string, this>;
 
     private lib_name: Reference<MyTxt>;
-    private includes: Reference<MyTxt>;
-    private libraries: Reference<MyTxt>;
+    private includes: Reference<Layout>;
+    private libraries: Reference<Layout>;
 
     public constructor(props: LibraryProps) {
         super({
@@ -24,8 +24,8 @@ export class Library extends MyRect {
         });
 
         this.lib_name = createRef<MyTxt>();
-        this.includes = createRef<MyTxt>();
-        this.libraries = createRef<MyTxt>();
+        this.includes = createRef<Layout>();
+        this.libraries = createRef<Layout>();
 
         this.add(
             <>
@@ -34,8 +34,16 @@ export class Library extends MyRect {
                 </Layout>
 
                 <Layout direction={"column"}>
-                    <MyTxt ref={this.includes} />
-                    <MyTxt ref={this.libraries} />
+                    <Layout direction={() => this.includes().children().length == 1 ? "column" : "row"}>
+                        <MyTxt text={"includes: ["} />
+                        <Layout ref={this.includes} />
+                        <MyTxt text={"]"} />
+                    </Layout>
+                    <Layout direction={() => this.libraries().children().length == 1 ? "column" : "row"}>
+                        <MyTxt text={"libraries: ["} />
+                        <Layout ref={this.libraries} />
+                        <MyTxt text={"]"} />
+                    </Layout>
                 </Layout>
             </>
         );
@@ -44,9 +52,13 @@ export class Library extends MyRect {
     public *appear(duration: number = animationTime) {
         yield* all(
             super.appear(duration),
-            this.lib_name().text(this.name, duration),
-            this.includes().text("includes:   []", duration),
-            this.libraries().text("libraries: []", duration),
+            this.lib_name().text(this.name, duration)
         );
+    }
+
+    public* addLibrary(name: string, duration: number = animationTime) {
+        const newTxt = createRef<MyTxt>();
+        this.libraries().add(<MyTxt ref={newTxt} />);
+        yield* newTxt().text("ㅤ" + name, duration);
     }
 }

@@ -8,14 +8,14 @@ import { Console } from "../../components/Console";
 import { animationTime } from "../../theme/Theme";
 
 const cmakeMathCode = CODE`\
-cmake_minimum_required(VERSION 3.25)
+cmake_minimum_required(VERSION 3.20)
 
 project(Math)
 
 add_library(\${PROJECT_NAME} Math.cpp)`;
 
 const cmakeMathCodeUpdate = CODE`\
-cmake_minimum_required(VERSION 3.25)
+cmake_minimum_required(VERSION 3.20)
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY \${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY \${CMAKE_BINARY_DIR}/lib)
@@ -32,7 +32,7 @@ add_library(\${PROJECT_NAME} Math.cpp)`;
 
 
 const rootCmakeCode = CODE`\
-cmake_minimum_required(VERSION 3.25)
+cmake_minimum_required(VERSION 3.20)
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY \${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY \${CMAKE_BINARY_DIR}/lib)
@@ -71,6 +71,101 @@ const cmakeBuildOutput =
         "[ 75%] Building CXX object Main.cpp.o",
         "[100%] Linking CXX executable Calculator",
         "[100%] Built target Calculator",];
+
+const cmakePresetsMinimumRequiredCode = CODE`\
+{
+    "version": 2,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 20,
+        "patch": 0
+    },
+
+}`;
+
+const cmakePresetsConfigureCode = CODE`\
+{
+    ..."cmakeMinimumRequired",
+    "configurePresets": [
+        {
+            "name": "debug",
+            "inherits": [
+                "common-flags"
+            ],
+            "binaryDir": "\${sourceDir}/build-\${presetName}",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },
+        {
+            "name": "release",
+            "inherits": [
+                "common-flags"
+            ],
+            "binaryDir": "\${sourceDir}/build-\${presetName}",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release"
+            }
+        },
+    ]
+}`;
+
+const cmakePresetsConfigureCommonCode = CODE`\
+{
+    ..."cmakeMinimumRequired",
+    "configurePresets": [
+        ..."debug",
+        ..."release",
+        {
+            "name": "common-flags",
+            "hidden": true,
+            "generator": "Ninja",
+            "cacheVariables": {
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+                "CMAKE_CXX_STANDARD": "20",
+                "CMAKE_CXX_STANDARD_REQUIRED": "ON",
+                "CMAKE_CXX_EXTENSIONS": "OFF",
+                "CMAKE_POSITION_INDEPENDENT_CODE": "ON",
+                "CMAKE_ARCHIVE_OUTPUT_DIRECTORY": "\${sourceDir}/\${...}/lib",
+                "CMAKE_LIBRARY_OUTPUT_DIRECTORY": "\${sourceDir}/\${...}/lib",
+                "CMAKE_RUNTIME_OUTPUT_DIRECTORY": "\${sourceDir}/\${...}/bin"
+            }
+        }
+    ]
+}`;
+
+const cmakePresetsBuildCode = CODE`\
+{
+    ..."cmakeMinimumRequired",
+    ..."configurePresets",
+    "buildPresets": [
+        {
+            "name": "debug",
+            "configurePreset": "debug"
+        },
+        {
+            "name": "release",
+            "configurePreset": "release"
+        }
+    ],
+}`;
+
+const cmakePresetsTestCode = CODE`\
+{
+    ..."cmakeMinimumRequired",
+    ..."configurePresets",
+    ..."buildPresets",
+    "testPresets": [
+        {
+            "name": "debug",
+            "configurePreset": "debug"
+        },
+        {
+            "name": "release",
+            "configurePreset": "release"
+        }
+    ]
+}`;
 
 export default makeScene2D(function* (view) {
     const libs = createFile("libs");
@@ -112,7 +207,7 @@ export default makeScene2D(function* (view) {
     );
 
     yield* all(
-        code().code.insert([7, 0], CODE`set(CMAKE_CXX_STANDARD 17)
+        code().code.insert([7, 0], CODE`set(CMAKE_CXX_STANDARD 20)
 `, animationTime),
         code().selection(lines(7), animationTime)
     );
@@ -156,6 +251,80 @@ export default makeScene2D(function* (view) {
         code().selection(lines(2, 9), animationTime)
     );
 
+    yield* beginSlide("Проблема с флагом стандарта");
+
+    yield* all(
+        code().selection(lines(6), animationTime)
+    );
+
+    yield* beginSlide("Показываем CMakePresets.json");
+
+    yield* all(
+        code().selection(DEFAULT, animationTime)
+    );
+
+    const cmakePresets = createFile("CMakePresets.json");
+
+    yield* all(
+        math().addFile(cmakePresets),
+        code().code(cmakePresetsMinimumRequiredCode, animationTime)
+    );
+
+    yield* beginSlide("CMakePresets version");
+
+    yield* code().selection(lines(1), animationTime);
+
+    yield* beginSlide("CMakePresetsMinimumRequired");
+
+    yield* code().selection(lines(2,6), animationTime);
+
+    yield* beginSlide("CMakePresets добавляем Configure часть");
+
+    yield* all(
+        code().code(cmakePresetsConfigureCode, animationTime),
+        code().selection(lines(2, 23), animationTime)
+    );
+
+    yield* beginSlide("CMakePresets debug configure");
+
+    yield* all(
+        code().selection(lines(3, 12), animationTime)
+    );
+
+    yield* beginSlide("CMakePresets release configure");
+
+    yield* all(
+        code().selection(lines(13, 22), animationTime)
+    );
+
+    yield* beginSlide("CMakePresets common flags");
+
+    yield* all(
+        code().code(cmakePresetsConfigureCommonCode, animationTime),
+        code().selection(lines(5, 19), animationTime)
+    );
+
+    yield* beginSlide("build presets");
+
+    yield* all(
+        code().code(cmakePresetsBuildCode, animationTime),
+        code().selection(lines(3, 12), animationTime)
+    );
+
+    yield* beginSlide("test presets");
+
+    yield* all(
+        code().code(cmakePresetsTestCode, animationTime),
+        code().selection(lines(4, 13), animationTime)
+    );
+
+    yield* beginSlide("Возвращаемся к CMakeLists");
+
+    yield* all(
+        code().code(cmakeMathCodeUpdate, animationTime),
+        code().selection(DEFAULT, animationTime),
+        root().highlight(cmake_math())
+    );
 
     yield* beginSlide("Конец");
 });

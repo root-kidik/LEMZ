@@ -45,7 +45,9 @@ import executable from './scenes/cmake/executable?scene';
 import executable_v2 from './scenes/cmake/executable_v2?scene';
 import shared_lib from './scenes/cmake/shared_lib?scene';
 import cpp_standard from './scenes/cmake/cpp_standard?scene';
+import cmake_presets from './scenes/cmake/cmake_presets?scene';
+import makefile from './scenes/cmake/makefile?scene';
 
 export default makeProject({
-  scenes: [base, executable, executable_v2, shared_lib, cpp_standard],
+  scenes: [base, executable, executable_v2, shared_lib, cpp_standard, cmake_presets, makefile],
 });

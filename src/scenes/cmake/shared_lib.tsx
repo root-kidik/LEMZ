@@ -8,7 +8,7 @@ import { Console } from "../../components/Console";
 import { animationTime } from "../../theme/Theme";
 
 const rootCmakeCode = CODE`\
-cmake_minimum_required(VERSION 3.25)
+cmake_minimum_required(VERSION 3.20)
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY \${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY \${CMAKE_BINARY_DIR}/lib)

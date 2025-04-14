@@ -16,17 +16,17 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY \${CMAKE_BINARY_DIR}/bin)
 `;
 
 const mainCppCode = CODE`\
-#include <iostream>
+#include <print>
 
 int sum(int,int);
 
 int main()
 {
-    std::cout << sum(1, 2) << '\\n';
+    std::println("{}", sum(1, 2));
 }`
 
 const cmakeRootCode = CODE`\
-cmake_minimum_required(VERSION 3.25)
+cmake_minimum_required(VERSION 3.20)
 
 project(Calculator)
 
@@ -130,7 +130,8 @@ export default makeScene2D(function* (view) {
         library().appear(),
         executable().appear(),
         line().lineWidth(25, animationTime),
-        line().startArrow(true, animationTime)
+        line().startArrow(true, animationTime),
+        executable().addLibrary("Math")
     );
 
     yield* beginSlide("Открываем консоль");
@@ -177,13 +178,13 @@ export default makeScene2D(function* (view) {
 
     yield* beginSlide("Удаляем build");
 
-    const childrens = [...root().children()]; 
+    const childrens = [...vscode().children()]; 
     childrens.pop();
 
     yield* console().terminal().type("rm -r build");
     yield* all(
         console().terminal().prompt(),
-        root().children(childrens, animationTime)
+        vscode().children(childrens, animationTime)
     );
     yield* console().terminal().clear();
 });
