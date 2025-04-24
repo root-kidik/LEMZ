@@ -325,6 +325,8 @@ export class Terminal extends Rect {
         for (let i = 0; i < output.length; i++) {
             yield* this.prompt(prompt, "white");
             yield* this.type(output[i], durationPerString);
+            if (this.children().length > this.maxChilds)
+                this.children().shift();
         }
         yield* this.prompt();
     }

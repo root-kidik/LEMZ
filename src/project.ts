@@ -54,8 +54,14 @@ Code.defaultHighlighter = new LezerHighlighter(
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
-import bugs from './scenes/sanitizers/bugs?scene';
+import heap_buffer_overflow from './scenes/sanitizers/heap_buffer_overflow?scene';
+import leak_memory from './scenes/sanitizers/leak_memory?scene';
+import undefined_sanitizer from './scenes/sanitizers/undefined_sanitizer?scene';
+import stack_use_after_scope from './scenes/sanitizers/stack_use_after_scope?scene';
+import memory_sanitizer from './scenes/sanitizers/memory_sanitizer?scene';
+import tsan_sanitizer from './scenes/sanitizers/tsan_sanitizer?scene';
+import project_cmake from './scenes/sanitizers/project_cmake?scene';
 
 export default makeProject({
-  scenes: [bugs],
+  scenes: [heap_buffer_overflow, leak_memory, undefined_sanitizer, stack_use_after_scope, memory_sanitizer, tsan_sanitizer, project_cmake],
 });
