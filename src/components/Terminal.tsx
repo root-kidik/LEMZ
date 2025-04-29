@@ -319,7 +319,12 @@ export class Terminal extends Rect {
         return { text, highlight };
     }
 
-    public *output(output: string[], prompt: string = "", duration: number = animationTime) {
+    public fixSize() {
+        while (this.children().length > this.maxChilds)
+            this.children().shift();
+    }
+
+    public *output(output: string[], prompt: string = "", duration: number = animationTime, isNeedNewLine: Boolean = true) {
         const durationPerString = duration / output.length;
 
         for (let i = 0; i < output.length; i++) {
@@ -328,6 +333,7 @@ export class Terminal extends Rect {
             if (this.children().length > this.maxChilds)
                 this.children().shift();
         }
-        yield* this.prompt();
+        if (isNeedNewLine)
+            yield* this.prompt();
     }
 }
