@@ -68,10 +68,20 @@ Code.defaultHighlighter = new LezerHighlighter(
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
-import service from './scenes/integration/service?scene';
-import code from './scenes/integration/code?scene';
-import cmake from './scenes/integration/cmake?scene';
+// import service from './scenes/integration/service?scene';
+// import code from './scenes/integration/code?scene';
+// import cmake from './scenes/integration/cmake?scene';
+
+// export default makeProject({
+//   scenes: [service, code, cmake],
+// });
+
+//////////////////////////////////////////////////////////////////////////////////////////
+
+import fpga_router from './scenes/devcontainer/fpga_router?scene';
+import vscode from './scenes/devcontainer/vscode?scene';
+import histograma from './scenes/devcontainer/histograma?scene';
 
 export default makeProject({
-  scenes: [service, code, cmake],
+  scenes: [fpga_router, vscode, histograma],
 });

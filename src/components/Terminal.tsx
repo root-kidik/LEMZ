@@ -218,7 +218,7 @@ export class Terminal extends Rect {
         time = 0.1,
     ) {
         if (fakeClear) {
-            yield* this.type(clearCommand, 1);
+            yield* this.type(clearCommand, animationTime);
             yield* this.blink();
             yield* waitFor(time);
         }
@@ -243,6 +243,7 @@ export class Terminal extends Rect {
     public *type(
         content: string,
         time: number = animationTime,
+        color: PossibleCanvasStyle = this.textStyle.fill(),
         timingFunction?: TimingFunction,
         interpolationFunction?: InterpolationFunction<string>,
     ) {
@@ -256,7 +257,7 @@ export class Terminal extends Rect {
         
         const last = this.getLast();
         const text = createRef<Txt>();
-        last.add(<Txt ref={text} {...this.textStyle} />);
+        last.add(<Txt ref={text} {...this.textStyle} fill={color} />);
         last.add(this.cursor);
         yield* text().text(content, time, timingFunction, interpolationFunction);
         yield* this.blink();
@@ -324,12 +325,12 @@ export class Terminal extends Rect {
             this.children().shift();
     }
 
-    public *output(output: string[], prompt: string = "", duration: number = animationTime, isNeedNewLine: Boolean = true) {
+    public *output(output: string[], prompt: string = "", duration: number = animationTime, isNeedNewLine: Boolean = true, color: PossibleCanvasStyle = this.textStyle.fill(),) {
         const durationPerString = duration / output.length;
 
         for (let i = 0; i < output.length; i++) {
             yield* this.prompt(prompt, "white");
-            yield* this.type(output[i], durationPerString);
+            yield* this.type(output[i], durationPerString, color);
             if (this.children().length > this.maxChilds)
                 this.children().shift();
         }
