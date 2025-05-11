@@ -35,7 +35,7 @@ export const fontSizeNormal = 28;
 
 export const fontFamilyDefault = "Jetbrains Mono";
 
-export const iconSize = 48;
+export const iconSize = 36;
 export const entryTextSize = 24;
 
 export const fileTypeMap: { [key: string]: { icon: string; color: string } } = {

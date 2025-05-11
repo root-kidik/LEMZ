@@ -13,10 +13,7 @@ export class Console extends MyRect {
         });
 
         this.terminal = createRef<Terminal>();
-
-        this.add(
-            <Terminal clip={true} maxChilds={28} ref={this.terminal} />
-        )
+        this.add(<Terminal clip={true} maxChilds={8} ref={this.terminal} />);
     }
 
     public *appear(duration: number = animationTime) {

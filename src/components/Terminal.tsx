@@ -33,7 +33,7 @@ export class Terminal extends Rect {
         fontFamily: createSignal(fontFamilyDefault),
         fontSize: createSignal(fontSizeNormal),
         fontWeight: createSignal(fontWeightBold),
-        height: createSignal(fontSizeNormal + 4),
+        height: createSignal(fontSizeNormal + 3),
     };
 
     @initial('none')
@@ -296,6 +296,8 @@ export class Terminal extends Rect {
         highlightColor: PossibleCanvasStyle = null,
     ) {
         yield* this.blink(false);
+        yield* this.newline();
+
         this.cursor.opacity(0);
         const [first, ...lines] = content.split('\n');
         const last = this.getLast();
@@ -317,6 +319,9 @@ export class Terminal extends Rect {
                 </Rect>,
             );
         });
+
+        this.fixSize();
+
         return { text, highlight };
     }
 

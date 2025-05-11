@@ -78,10 +78,23 @@ Code.defaultHighlighter = new LezerHighlighter(
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
-import fpga_router from './scenes/devcontainer/fpga_router?scene';
-import vscode from './scenes/devcontainer/vscode?scene';
-import histograma from './scenes/devcontainer/histograma?scene';
+// import fpga_router from './scenes/devcontainer/fpga_router?scene';
+// import vscode from './scenes/devcontainer/vscode?scene';
+// import histograma from './scenes/devcontainer/histograma?scene';
+
+// export default makeProject({
+//   scenes: [fpga_router, vscode, histograma],
+// });
+
+//////////////////////////////////////////////////////////////////////////////////////////
+
+import deadcode from './scenes/clangtidy/deadcode?scene';
+import ctorcopy from './scenes/clangtidy/ctorcopy?scene';
+import ctorinit from './scenes/clangtidy/ctorinit?scene';
+import magic from './scenes/clangtidy/magic?scene';
+import dtor from './scenes/clangtidy/dtor?scene';
+import repo from './scenes/clangtidy/repo?scene';
 
 export default makeProject({
-  scenes: [fpga_router, vscode, histograma],
+  scenes: [deadcode, ctorcopy, ctorinit, magic, dtor, repo],
 });
