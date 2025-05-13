@@ -74,6 +74,10 @@ Checks: >
   portability-*,
   readability-*,
   concurrency-*,
+  boost-*,
+  cert-*,
+  hicpp-*,
+  google-*,
   -bugprone-easily-swappable-parameters,
   -misc-include-cleaner,
   -modernize-use-trailing-return-type,
@@ -223,7 +227,7 @@ export default makeScene2D(function* (view) {
 
     yield* beginSlide("Конфиг");
 
-    yield* code().selection(lines(0, 14), animationTime);
+    yield* code().selection(lines(0, 18), animationTime);
 
     yield* beginSlide("All turnoff");
 
@@ -231,15 +235,15 @@ export default makeScene2D(function* (view) {
 
     yield* beginSlide("turn on");
 
-    yield* code().selection(lines(2, 10), animationTime);
+    yield* code().selection(lines(2, 14), animationTime);
 
     yield* beginSlide("disable some");
 
-    yield* code().selection(lines(11, 14), animationTime);
+    yield* code().selection(lines(15, 18), animationTime);
 
     yield* beginSlide("options");
 
-    yield* code().selection(lines(15, 18), animationTime);
+    yield* code().selection(lines(19, 22), animationTime);
 
     yield* beginSlide("cmake presets");
 

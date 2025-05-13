@@ -92,9 +92,10 @@ import deadcode from './scenes/clangtidy/deadcode?scene';
 import ctorcopy from './scenes/clangtidy/ctorcopy?scene';
 import ctorinit from './scenes/clangtidy/ctorinit?scene';
 import magic from './scenes/clangtidy/magic?scene';
+import deadcode2 from './scenes/clangtidy/deadcode2?scene';
 import dtor from './scenes/clangtidy/dtor?scene';
 import repo from './scenes/clangtidy/repo?scene';
 
 export default makeProject({
-  scenes: [deadcode, ctorcopy, ctorinit, magic, dtor, repo],
+  scenes: [deadcode, ctorcopy, ctorinit, magic, deadcode2, dtor, repo],
 });
