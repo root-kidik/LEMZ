@@ -32,6 +32,7 @@ export const marginLeft = 10;
 export const fontWeightBold = 800;
 export const fontSizeSmall = 24;
 export const fontSizeNormal = 28;
+export const fontSizeBig = 36;
 
 export const fontFamilyDefault = "Jetbrains Mono";
 
