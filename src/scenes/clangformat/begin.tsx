@@ -177,20 +177,20 @@ IndentExternBlock: Indent
         txt().text("7", 0),
         cppl().code(`\
 #if FOO
-  #if BAR
-    #include <foo>
-  #endif
-#endif
-`, animationTime),
-        cppr().code(`\
-#if FOO
 #if BAR
 #include <foo>
 #endif
 #endif
 `, animationTime),
+        cppr().code(`\
+#if FOO
+  #if BAR
+    #include <foo>
+  #endif
+#endif
+`, animationTime),
         ct().code(`\
-IndentPPDirectives: None
+IndentPPDirectives: BeforeHash
 `, animationTime)
     );
 
@@ -200,20 +200,19 @@ IndentPPDirectives: None
         txt().text("8", 0),
         cppl().code(`\
 template <typename It>
+  requires Iterator<It>
+void sort(It begin, It end) {
+  //....
+}`, animationTime),
+        cppr().code(`\
+template <typename It>
 requires Iterator<It>
 void sort(It begin, It end) {
   //....
 }
 `, animationTime),
-        cppr().code(`\
-template <typename It>
-  requires Iterator<It>
-void sort(It begin, It end) {
-  //....
-}
-`, animationTime),
         ct().code(`\
-IndentRequires: true
+IndentRequires: false
 `, animationTime)
     );
 
@@ -249,14 +248,14 @@ IndentWidth: 4
         txt().text("10", 0),
         cppl().code(`\
 LoongReturnType
-LoongFunctionDeclaration();
+    LoongFunctionDeclaration();
 `, animationTime),
         cppr().code(`\
 LoongReturnType
-    LoongFunctionDeclaration();
+LoongFunctionDeclaration();
 `, animationTime),
         ct().code(`\
-IndentWrappedFunctionNames: true
+IndentWrappedFunctionNames: false
 `, animationTime)
     );
 
@@ -683,16 +682,16 @@ BreakAfterReturnType: Automatic
     yield* all(
         txt().text("30", 0),
         cppl().code(`\
-std::string aaaa = "bbbb"
-                   "cccc";
-`, animationTime),
-        cppr().code(`\
 std::string aaaa = 
                 "bbbb"
                 "cccc";
 `, animationTime),
+        cppr().code(`\
+std::string aaaa = "bbbb"
+                   "cccc";
+`, animationTime),
         ct().code(`\
-AlwaysBreakBeforeMultilineStrings: true
+AlwaysBreakBeforeMultilineStrings: false
 `, animationTime)
     );
 
@@ -753,17 +752,17 @@ BreakBeforeTernaryOperators: true
     yield* all(
         txt().text("34", 0),
         cppl().code(`\
-Constructor()
-    : initializer1{}
-    , initializer2{}
-`, animationTime),
-        cppr().code(`\
 Constructor() :
     initializer1{},
     initializer2{}
 `, animationTime),
+        cppr().code(`\
+Constructor()
+    : initializer1{}
+    , initializer2{}
+`, animationTime),
         ct().code(`\
-BreakConstructorInitializers: AfterColon
+BreakConstructorInitializers: BeforeComma
 `, animationTime)
     );
 
@@ -793,19 +792,19 @@ BreakBeforeBinaryOperators: None
     yield* all(
         txt().text("36", 0),
         cppl().code(`\
-class Foo
-    : Base1
-    , Base2
-{};
-`, animationTime),
-        cppr().code(`\
 class Foo :
     Base1,
     Base2
 {};
 `, animationTime),
+        cppr().code(`\
+class Foo
+    : Base1
+    , Base2
+{};
+`, animationTime),
         ct().code(`\
-BreakInheritanceList: AfterColon
+BreakInheritanceList: BeforeComma
 `, animationTime)
     );
 
@@ -869,20 +868,20 @@ BinPackParameters: false
         txt().text("40", 0),
         cppl().code(`\
 X::X() 
-    : m_value{}
-{
-    
-}
-`, animationTime),
-        cppr().code(`\
-X::X() 
 : m_value{}
 {
 
 }
 `, animationTime),
+        cppr().code(`\
+X::X() 
+    : m_value{}
+{
+    
+}
+`, animationTime),
         ct().code(`\
-ConstructorInitializerIndentWidth: 0
+ConstructorInitializerIndentWidth: 4
 `, animationTime)
     );
 
