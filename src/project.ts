@@ -102,9 +102,19 @@ Code.defaultHighlighter = new LezerHighlighter(
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
-import begin from './scenes/clangformat/begin?scene';
+// import begin from './scenes/clangformat/begin?scene';
+
+// export default makeProject({
+//   scenes: [begin],
+// });
+
+//////////////////////////////////////////////////////////////////////////////////////////
+
+import thread from './scenes/threadfastpimpl/thread?scene';
+import thread_code from './scenes/threadfastpimpl/thread_code?scene';
+import impl from './scenes/threadfastpimpl/impl?scene';
+import impl_histogramm from './scenes/threadfastpimpl/impl_histogramm?scene';
 
 export default makeProject({
-  scenes: [begin],
+  scenes: [thread, thread_code, impl, impl_histogramm],
 });
-

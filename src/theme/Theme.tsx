@@ -13,6 +13,7 @@ export const colorRed = "rgb(170, 20, 20)";
 export const colorWhiteBlue = "rgb(51,166,255)";
 export const colorGreen = "rgb(50, 190, 20)";
 
+export const paddingNormal = 20;
 export const paddingBig = 40;
 
 export const gapNormal = 5;
